@@ -9,7 +9,7 @@ import { colors } from '@/constants/theme';
 import { ArrowLeft, Plus, Minus, Clock } from 'lucide-react-native';
 import { router } from 'expo-router';
 import { Calendar } from 'react-native-calendars';
-import RNPickerSelect from 'react-native-picker-select';
+import { Picker } from '@react-native-picker/picker';
 
 type ScheduleMode = 'times' | 'interval';
 type FoodRelation = 'before' | 'after' | 'none';
@@ -150,7 +150,7 @@ export default function AddMedicationScreen() {
       if (error) throw error;
 
       Alert.alert('Başarılı', 'İlaç başarıyla kaydedildi.', [
-        { text: 'Tamam', onPress: () => router.push('/(tabs)') }
+        { text: 'Tamam', onPress: () => router.replace('/(tabs)') }
       ]);
     } catch (error: any) {
       console.error('Error saving medication:', error);
@@ -222,33 +222,33 @@ export default function AddMedicationScreen() {
 
               <View style={[styles.inputContainer, { flex: 1, marginLeft: 12 }]}>
                 <Text style={styles.label}>Birim</Text>
-                <Surface style={styles.pickerContainer}>
-                  <RNPickerSelect
+                <View style={styles.pickerContainer}>
+                  <Picker
+                    selectedValue={formData.dose_unit}
                     onValueChange={(value) => setFormData(prev => ({ ...prev, dose_unit: value }))}
-                    items={doseUnits}
-                    value={formData.dose_unit}
-                    style={{
-                      inputAndroid: styles.pickerInput,
-                      inputIOS: styles.pickerInput,
-                    }}
-                  />
-                </Surface>
+                    style={styles.picker}
+                  >
+                    {doseUnits.map(unit => (
+                      <Picker.Item key={unit.value} label={unit.label} value={unit.value} />
+                    ))}
+                  </Picker>
+                </View>
               </View>
             </View>
 
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Form</Text>
-              <Surface style={styles.pickerContainer}>
-                <RNPickerSelect
+              <View style={styles.pickerContainer}>
+                <Picker
+                  selectedValue={formData.form}
                   onValueChange={(value) => setFormData(prev => ({ ...prev, form: value }))}
-                  items={medicationForms}
-                  value={formData.form}
-                  style={{
-                    inputAndroid: styles.pickerInput,
-                    inputIOS: styles.pickerInput,
-                  }}
-                />
-              </Surface>
+                  style={styles.picker}
+                >
+                  {medicationForms.map(form => (
+                    <Picker.Item key={form.value} label={form.label} value={form.value} />
+                  ))}
+                </Picker>
+              </View>
             </View>
 
             <View style={styles.inputContainer}>
@@ -579,13 +579,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.outline,
     backgroundColor: colors.surface,
-    minHeight: 56,
-    justifyContent: 'center',
+    overflow: 'hidden',
   },
-  pickerInput: {
-    fontSize: 16,
-    padding: 16,
+  picker: {
+    height: 56,
     color: colors.onSurface,
+    backgroundColor: colors.surface,
   },
   chipContainer: {
     flexDirection: 'row',

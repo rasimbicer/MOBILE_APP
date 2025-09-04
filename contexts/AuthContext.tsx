@@ -142,6 +142,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const updateProfile = async (updates: Partial<UserProfile>) => {
     if (!user) return;
 
+    setLoading(true);
     try {
       const { error } = await supabase
         .from('user_profiles')
@@ -154,6 +155,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       console.error('Error updating profile:', error);
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 

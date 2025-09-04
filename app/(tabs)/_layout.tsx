@@ -1,7 +1,7 @@
 import { Tabs } from 'expo-router';
 import { useAuth } from '@/contexts/AuthContext';
 import { Redirect } from 'expo-router';
-import { Chrome as Home, Plus, Clock, Settings } from 'lucide-react-native';
+import { Home, Plus, Clock, Settings } from 'lucide-react-native';
 import { colors } from '@/constants/theme';
 
 export default function TabLayout() {
