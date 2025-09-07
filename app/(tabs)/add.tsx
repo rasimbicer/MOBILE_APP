@@ -9,7 +9,7 @@ import { colors } from '@/constants/theme';
 import { ArrowLeft, Plus, Minus, Clock } from 'lucide-react-native';
 import { router } from 'expo-router';
 import { Calendar } from 'react-native-calendars';
-import RNPickerSelect from 'react-native-picker-select';
+import { Picker } from '@react-native-picker/picker';
 import { Picker } from '@react-native-picker/picker';
 
 type ScheduleMode = 'times' | 'interval';
@@ -239,13 +239,18 @@ export default function AddMedicationScreen() {
 
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Form</Text>
-              <RNPickerSelect
-                onValueChange={(value) => setFormData(prev => ({ ...prev, form: value }))}
-                items={medicationForms}
-                value={formData.form}
-                style={pickerSelectStyles}
-                placeholder={{}}
-              />
+              <View style={styles.pickerContainer}>
+                <Picker
+                  selectedValue={formData.form}
+                  onValueChange={(value) => setFormData(prev => ({ ...prev, form: value }))}
+                  style={styles.picker}
+                >
+                  {medicationForms.map(form => (
+                    <Picker.Item key={form.value} label={form.label} value={form.value} />
+                  ))}
+                </Picker>
+              </View>
+              
               <View style={styles.chipContainer}>
                 <Chip
                   selected={formData.schedule_mode === 'times'}
@@ -676,40 +681,5 @@ const styles = StyleSheet.create({
   saveButtonLabel: {
     fontSize: 16,
     fontWeight: '600',
-  },
-});
-
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    borderWidth: 1,
-    borderColor: colors.outline,
-    borderRadius: 12,
-    color: colors.onSurface,
-    backgroundColor: colors.surface,
-    paddingRight: 30,
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    borderWidth: 1,
-    borderColor: colors.outline,
-    borderRadius: 12,
-    color: colors.onSurface,
-    backgroundColor: colors.surface,
-    paddingRight: 30,
-  },
-  inputWeb: {
-    fontSize: 16,
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    borderWidth: 1,
-    borderColor: colors.outline,
-    borderRadius: 12,
-    color: colors.onSurface,
-    backgroundColor: colors.surface,
   },
 });

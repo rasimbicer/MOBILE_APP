@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Medication, MedicationGroup } from '@/types/database.types';
 import supabase from '@/lib/supabase';
 import { colors } from '@/constants/theme';
-import { Pill, Clock, Trash2, CreditCard as Edit, Search } from 'lucide-react-native';
+import { Pill, Clock, Trash2, Edit2, Search, Plus } from 'lucide-react-native';
 import { router } from 'expo-router';
 
 export default function MedicationsScreen() {
@@ -235,7 +235,7 @@ export default function MedicationsScreen() {
                     style={styles.actionButton}
                     onPress={() => router.push(`/medication/${medication.id}`)}
                   >
-                    <Edit size={20} color={colors.primary} />
+                    <Edit2 size={20} color={colors.primary} />
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.actionButton}

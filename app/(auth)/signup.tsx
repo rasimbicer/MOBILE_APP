@@ -71,8 +71,8 @@ export default function SignUp() {
   const handleSignUp = async () => {
     if (!validateForm()) return;
 
-    setLoading(true);
     try {
+      setLoading(true);
       await signUp(
         formData.email,
         formData.password,
@@ -80,7 +80,6 @@ export default function SignUp() {
         formData.phone,
         formData.dob
       );
-      router.replace('/(tabs)');
     } catch (error: any) {
       Alert.alert('Kayıt Hatası', error.message || 'Kayıt olurken bir hata oluştu.');
     } finally {

@@ -78,8 +78,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signUp = async (email: string, password: string, fullName: string, phone: string, dob: string) => {
-    setLoading(true);
     try {
+      setLoading(true);
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -98,6 +98,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               phone,
               dob,
               consent_at: new Date().toISOString(),
+              locale: 'tr',
+              premium_active: false,
             },
           ]);
 
@@ -105,6 +107,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           console.error('Error creating profile:', profileError);
           throw profileError;
         }
+        
+        // Fetch the created profile
+        await fetchProfile(data.user.id);
       }
     } catch (error) {
       console.error('Error signing up:', error);
@@ -115,8 +120,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signIn = async (email: string, password: string) => {
-    setLoading(true);
     try {
+      setLoading(true);
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,

@@ -46,16 +46,16 @@ export default function OnboardingScreen() {
   const handleSubmit = async () => {
     if (!validateForm()) return;
 
-    setSubmitting(true);
     try {
+      setSubmitting(true);
       await updateProfile({
         full_name: formData.fullName,
         phone: formData.phone,
         dob: formData.dob,
         consent_at: new Date().toISOString(),
-      } as any);
+        locale: 'tr',
+      });
 
-      router.replace('/(tabs)');
     } catch (error: any) {
       Alert.alert('Hata', error.message || 'Profil güncellenirken bir hata oluştu.');
     } finally {

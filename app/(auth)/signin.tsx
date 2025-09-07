@@ -30,10 +30,9 @@ export default function SignIn() {
       return;
     }
 
-    setLoading(true);
     try {
+      setLoading(true);
       await signIn(email, password);
-      router.replace('/(tabs)');
     } catch (error: any) {
       Alert.alert('Giriş Hatası', error.message || 'Giriş yapılırken bir hata oluştu.');
     } finally {
