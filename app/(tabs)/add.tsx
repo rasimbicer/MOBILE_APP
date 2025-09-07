@@ -10,6 +10,7 @@ import { ArrowLeft, Plus, Minus, Clock } from 'lucide-react-native';
 import { router } from 'expo-router';
 import { Calendar } from 'react-native-calendars';
 import RNPickerSelect from 'react-native-picker-select';
+import { Picker } from '@react-native-picker/picker';
 
 type ScheduleMode = 'times' | 'interval';
 type FoodRelation = 'before' | 'after' | 'none';
