@@ -41,19 +41,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const initializeAuth = async () => {
     // Test Supabase connection first
     setConnectionStatus('connecting');
-    const isConnected = await testConnection();
     
-    if (!isConnected) {
+    try {
+      const isConnected = await testConnection();
+      
+      if (!isConnected) {
+        setConnectionStatus('error');
+        setLoading(false);
+        Alert.alert(
+          'Veritabanı Hatası',
+          'Supabase tablolarına erişilemiyor. Migration dosyasını çalıştırmanız gerekebilir.',
+          [
+            { text: 'Tekrar Dene', onPress: retryConnection },
+            { text: 'Tamam' }
+          ]
+        );
+        return;
+      }
+    } catch (error) {
+      console.error('Connection test failed:', error);
       setConnectionStatus('error');
       setLoading(false);
-      Alert.alert(
-        'Bağlantı Hatası',
-        'Supabase veritabanına bağlanılamıyor. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin.',
-        [
-          { text: 'Tekrar Dene', onPress: retryConnection },
-          { text: 'Tamam' }
-        ]
-      );
       return;
     }
 

@@ -17,9 +17,14 @@ export default function Welcome() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.errorContainer}>
-          <Text style={styles.errorTitle}>Bağlantı Hatası</Text>
+          <Text style={styles.errorTitle}>Veritabanı Hatası</Text>
           <Text style={styles.errorText}>
-            Supabase veritabanına bağlanılamıyor. Lütfen internet bağlantınızı kontrol edin.
+            Supabase tablolarına erişilemiyor. Lütfen migration dosyasını çalıştırın.
+          </Text>
+          <Text style={styles.migrationText}>
+            1. Supabase Dashboard'a gidin{'\n'}
+            2. SQL Editor'ı açın{'\n'}
+            3. Migration dosyasını çalıştırın
           </Text>
           <Button
             mode="contained"
@@ -130,6 +135,13 @@ const styles = StyleSheet.create({
     color: colors.onSurfaceVariant,
     textAlign: 'center',
     lineHeight: 22,
+    marginBottom: 24,
+  },
+  migrationText: {
+    fontSize: 14,
+    color: colors.onSurfaceVariant,
+    textAlign: 'left',
+    lineHeight: 20,
     marginBottom: 24,
   },
   retryButton: {
