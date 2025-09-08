@@ -6,10 +6,43 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Pill } from 'lucide-react-native';
 import { colors } from '@/constants/theme';
+import { useAuth } from '@/contexts/AuthContext';
 
 const { width, height } = Dimensions.get('window');
 
 export default function Welcome() {
+  const { connectionStatus, retryConnection } = useAuth();
+
+  if (connectionStatus === 'error') {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorTitle}>Bağlantı Hatası</Text>
+          <Text style={styles.errorText}>
+            Supabase veritabanına bağlanılamıyor. Lütfen internet bağlantınızı kontrol edin.
+          </Text>
+          <Button
+            mode="contained"
+            onPress={retryConnection}
+            style={styles.retryButton}
+          >
+            Tekrar Dene
+          </Button>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (connectionStatus === 'connecting') {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.loadingContainer}>
+          <Text style={styles.loadingText}>Bağlanıyor...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <ImageBackground
       source={{ uri: 'https://images.pexels.com/photos/3683107/pexels-photo-3683107.jpeg' }}
@@ -79,6 +112,37 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+  errorTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: colors.error,
+    marginBottom: 16,
+  },
+  errorText: {
+    fontSize: 16,
+    color: colors.onSurfaceVariant,
+    textAlign: 'center',
+    lineHeight: 22,
+    marginBottom: 24,
+  },
+  retryButton: {
+    backgroundColor: colors.primary,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 18,
+    color: colors.onSurfaceVariant,
   },
   content: {
     flex: 1,

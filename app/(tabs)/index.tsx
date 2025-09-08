@@ -24,7 +24,7 @@ export default function MedicationsScreen() {
       fetchMedications();
       fetchGroups();
     }
-  }, [user]);
+  }, [user, profile]);
 
   const fetchMedications = async () => {
     if (!user) return;
@@ -40,7 +40,7 @@ export default function MedicationsScreen() {
       setMedications(data || []);
     } catch (error) {
       console.error('Error fetching medications:', error);
-      Alert.alert('Hata', 'İlaçlar yüklenirken bir hata oluştu.');
+      Alert.alert('Hata', 'İlaçlar yüklenirken bir hata oluştu. Lütfen internet bağlantınızı kontrol edin.');
     } finally {
       setLoading(false);
     }
@@ -60,6 +60,7 @@ export default function MedicationsScreen() {
       setGroups(data || []);
     } catch (error) {
       console.error('Error fetching groups:', error);
+      // Groups are optional, don't show error to user
     }
   };
 

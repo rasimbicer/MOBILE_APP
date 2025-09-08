@@ -1,17 +1,20 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
-import supabase from '@/lib/supabase';
+import supabase, { testConnection } from '@/lib/supabase';
 import { UserProfile } from '@/types/database.types';
+import { Alert } from 'react-native';
 
 interface AuthContextType {
   session: Session | null;
   user: User | null;
   profile: UserProfile | null;
   loading: boolean;
+  connectionStatus: 'connecting' | 'connected' | 'error';
   signUp: (email: string, password: string, fullName: string, phone: string, dob: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   updateProfile: (updates: Partial<UserProfile>) => Promise<void>;
+  retryConnection: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -29,8 +32,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'error'>('connecting');
 
   useEffect(() => {
+    initializeAuth();
+  }, []);
+
+  const initializeAuth = async () => {
+    // Test Supabase connection first
+    setConnectionStatus('connecting');
+    const isConnected = await testConnection();
+    
+    if (!isConnected) {
+      setConnectionStatus('error');
+      setLoading(false);
+      Alert.alert(
+        'Bağlantı Hatası',
+        'Supabase veritabanına bağlanılamıyor. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin.',
+        [
+          { text: 'Tekrar Dene', onPress: retryConnection },
+          { text: 'Tamam' }
+        ]
+      );
+      return;
+    }
+
+    setConnectionStatus('connected');
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
@@ -54,10 +82,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     });
 
-    return () => subscription.unsubscribe();
-  }, []);
+    return subscription;
+  };
+
+  const retryConnection = async () => {
+    setConnectionStatus('connecting');
+    const isConnected = await testConnection();
+    
+    if (isConnected) {
+      setConnectionStatus('connected');
+      initializeAuth();
+    } else {
+      setConnectionStatus('error');
+      Alert.alert('Bağlantı Hatası', 'Hala bağlanılamıyor. Lütfen daha sonra tekrar deneyin.');
+    }
+  };
 
   const fetchProfile = async (userId: string) => {
+    if (connectionStatus !== 'connected') return;
+    
     try {
       const { data, error } = await supabase
         .from('user_profiles')
@@ -66,7 +109,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .single();
 
       if (error) {
-        console.error('Error fetching profile:', error);
+        if (error.code === 'PGRST116') {
+          // Profile doesn't exist, this is normal for new users
+          console.log('Profile not found, user needs to complete onboarding');
+        } else {
+          console.error('Error fetching profile:', error);
+        }
       } else {
         setProfile(data);
       }
@@ -78,6 +126,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signUp = async (email: string, password: string, fullName: string, phone: string, dob: string) => {
+    if (connectionStatus !== 'connected') {
+      throw new Error('Veritabanı bağlantısı yok. Lütfen bağlantıyı kontrol edin.');
+    }
+
     try {
       setLoading(true);
       const { data, error } = await supabase.auth.signUp({
@@ -120,6 +172,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signIn = async (email: string, password: string) => {
+    if (connectionStatus !== 'connected') {
+      throw new Error('Veritabanı bağlantısı yok. Lütfen bağlantıyı kontrol edin.');
+    }
+
     try {
       setLoading(true);
       const { error } = await supabase.auth.signInWithPassword({
@@ -146,6 +202,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const updateProfile = async (updates: Partial<UserProfile>) => {
     if (!user) return;
+    if (connectionStatus !== 'connected') {
+      throw new Error('Veritabanı bağlantısı yok. Lütfen bağlantıyı kontrol edin.');
+    }
 
     setLoading(true);
     try {
@@ -170,10 +229,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     user,
     profile,
     loading,
+    connectionStatus,
     signUp,
     signIn,
     signOut,
     updateProfile,
+    retryConnection,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -41,7 +41,9 @@ export default function AddMedicationScreen() {
   });
 
   useEffect(() => {
-    fetchGroups();
+    if (user) {
+      fetchGroups();
+    }
   }, []);
 
   const fetchGroups = async () => {
@@ -58,6 +60,7 @@ export default function AddMedicationScreen() {
       setGroups(data || []);
     } catch (error) {
       console.error('Error fetching groups:', error);
+      Alert.alert('Hata', 'Gruplar yüklenirken bir hata oluştu. Lütfen internet bağlantınızı kontrol edin.');
     }
   };
 
