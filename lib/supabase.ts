@@ -29,25 +29,14 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 // Test bağlantısı
 export const testConnection = async () => {
   try {
-    // Test basic connection first
-    const { data: authData, error: authError } = await supabase.auth.getSession();
-    if (authError) {
-      console.error('Auth test failed:', authError);
-      return false;
-    }
-
-    // Test if tables exist by trying to query user_profiles
+    // Test if tables exist by trying to query user_profiles  
     const { data, error } = await supabase
       .from('user_profiles')
       .select('user_id')
       .limit(1);
       
     if (error) {
-      if (error.code === '42P01') {
-        console.error('Tablolar mevcut değil. Migration çalıştırılmalı:', error.message);
-      } else {
-        console.error('Supabase bağlantı hatası:', error);
-      }
+      console.error('Supabase bağlantı hatası:', error);
       return false;
     }
     
