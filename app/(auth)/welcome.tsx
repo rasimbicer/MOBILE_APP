@@ -11,42 +11,7 @@ import { useAuth } from '@/contexts/AuthContext';
 const { width, height } = Dimensions.get('window');
 
 export default function Welcome() {
-  const { connectionStatus, retryConnection } = useAuth();
-
-  if (connectionStatus === 'error') {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorTitle}>Veritabanı Hatası</Text>
-          <Text style={styles.errorText}>
-            Supabase tablolarına erişilemiyor. Lütfen migration dosyasını çalıştırın.
-          </Text>
-          <Text style={styles.migrationText}>
-            1. Supabase Dashboard'a gidin{'\n'}
-            2. SQL Editor'ı açın{'\n'}
-            3. Migration dosyasını çalıştırın
-          </Text>
-          <Button
-            mode="contained"
-            onPress={retryConnection}
-            style={styles.retryButton}
-          >
-            Tekrar Dene
-          </Button>
-        </View>
-      </SafeAreaView>
-    );
-  }
-
-  if (connectionStatus === 'connecting') {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>Bağlanıyor...</Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
+  const { loading } = useAuth();
 
   return (
     <ImageBackground

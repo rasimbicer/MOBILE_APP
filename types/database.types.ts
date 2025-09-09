@@ -20,7 +20,7 @@ export interface MedicationSchedule {
   mode: 'times' | 'interval';
   times?: string[]; // HH:mm format
   everyHours?: number;
-  daysOfWeek?: number[]; // 0=Sunday, 1=Monday, etc.
+  daysOfWeek: number[]; // 1=Monday, 2=Tuesday, etc.
   startDate: string;
   endDate?: string;
   timezone: string;
