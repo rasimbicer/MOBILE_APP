@@ -38,7 +38,7 @@ export default function HistoryScreen() {
           *,
           medication:medications(*)
         `)
-        .eq('user_id', user.id)
+        .eq('created_by', user.id)
         .gte('ts', startOfDay.toISOString())
         .lte('ts', endOfDay.toISOString())
         .order('ts', { ascending: false });

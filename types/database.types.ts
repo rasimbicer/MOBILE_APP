@@ -1,6 +1,5 @@
 export interface UserProfile {
   id: string;
-  user_id: string;
   full_name: string;
   birth_date: string;
   phone: string;
@@ -12,7 +11,7 @@ export interface UserProfile {
 
 export interface MedicationGroup {
   id: string;
-  user_id: string;
+  created_by: string;
   name: string;
   created_at: string;
 }
@@ -29,7 +28,7 @@ export interface MedicationSchedule {
 
 export interface Medication {
   id: string;
-  user_id: string;
+  created_by: string;
   group_id?: string;
   name: string;
   dose_value?: number;
@@ -56,8 +55,8 @@ export interface IntakeLog {
 
 export interface Share {
   id: string;
-  owner_user_id: string;
-  target_user_id: string;
+  owner_id: string;
+  shared_with_id: string;
   role: 'owner' | 'caregiver' | 'member';
   scopes: {
     view: boolean;

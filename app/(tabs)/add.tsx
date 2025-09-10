@@ -52,7 +52,7 @@ export default function AddMedicationScreen() {
       const { data, error } = await supabase
         .from('groups')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('created_by', user.id)
         .order('name');
 
       if (error) throw error;
@@ -137,7 +137,7 @@ export default function AddMedicationScreen() {
       const { error } = await supabase
         .from('medications')
         .insert([{
-          user_id: user!.id,
+          created_by: user!.id,
           name: formData.name.trim(),
           dose_value: formData.dose_value ? parseFloat(formData.dose_value) : null,
           dose_unit: formData.dose_unit,

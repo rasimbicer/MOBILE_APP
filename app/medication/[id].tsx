@@ -56,7 +56,7 @@ export default function EditMedicationScreen() {
         .from('medications')
         .select('*')
         .eq('id', id)
-        .eq('user_id', user.id)
+        .eq('created_by', user.id)
         .single();
 
       if (error) throw error;
@@ -138,7 +138,7 @@ export default function EditMedicationScreen() {
           updated_at: new Date().toISOString(),
         })
         .eq('id', medication.id)
-        .eq('user_id', user.id);
+        .eq('created_by', user.id);
 
       if (error) throw error;
 

@@ -29,15 +29,23 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 // Test bağlantısı
 export const testConnection = async () => {
   try {
-    // Test if tables exist by trying to query user_profiles  
+    // Test basic connection first
     const { data, error } = await supabase
-      .from('user_profiles')
-      .select('user_id')
+      .from('auth.users')
+      .select('id')
       .limit(1);
       
     if (error) {
-      console.error('Supabase bağlantı hatası:', error);
-      return false;
+      // If auth.users fails, try user_profiles with correct column
+      const { data: profileData, error: profileError } = await supabase
+        .from('user_profiles')
+        .select('id')
+        .limit(1);
+        
+      if (profileError) {
+        console.error('Supabase bağlantı hatası:', profileError);
+        return false;
+      }
     }
     
     console.log('Supabase bağlantısı başarılı!');

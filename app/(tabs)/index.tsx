@@ -70,7 +70,7 @@ export default function MedicationsScreen() {
         .from('medications')
         .delete()
         .eq('id', id)
-        .eq('user_id', user?.id);
+        .eq('created_by', user?.id);
 
       if (error) throw error;
 
