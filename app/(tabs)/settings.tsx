@@ -75,37 +75,29 @@ export default function SettingsScreen() {
               <Text style={styles.profileName}>{profile?.full_name}</Text>
               <Text style={styles.profileEmail}>{user?.email}</Text>
             </View>
-            {profile?.premium_active && (
-              <View style={styles.premiumBadge}>
-                <Crown size={16} color="#FFFFFF" />
-                <Text style={styles.premiumText}>Premium</Text>
-              </View>
-            )}
           </View>
         </Surface>
 
         {/* Premium Section */}
-        {!profile?.premium_active && (
-          <Surface style={styles.section} elevation={1}>
-            <View style={styles.premiumSection}>
-              <View style={styles.premiumHeader}>
-                <Crown size={24} color={colors.warning} />
-                <Text style={styles.premiumTitle}>Premium'a Geçin</Text>
-              </View>
-              <Text style={styles.premiumSubtitle}>
-                Sınırsız ilaç, aile paylaşımı ve raporlama özellikleri
-              </Text>
-              <Button
-                mode="contained"
-                style={[styles.premiumButton, { backgroundColor: colors.warning }]}
-                labelStyle={styles.premiumButtonLabel}
-                onPress={() => Alert.alert('Yakında', 'Premium özellikler yakında aktif olacak.')}
-              >
-                Premium'a Geç
-              </Button>
+        <Surface style={styles.section} elevation={1}>
+          <View style={styles.premiumSection}>
+            <View style={styles.premiumHeader}>
+              <Crown size={24} color={colors.warning} />
+              <Text style={styles.premiumTitle}>Premium'a Geçin</Text>
             </View>
-          </Surface>
-        )}
+            <Text style={styles.premiumSubtitle}>
+              Sınırsız ilaç, aile paylaşımı ve raporlama özellikleri
+            </Text>
+            <Button
+              mode="contained"
+              style={[styles.premiumButton, { backgroundColor: colors.warning }]}
+              labelStyle={styles.premiumButtonLabel}
+              onPress={() => Alert.alert('Yakında', 'Premium özellikler yakında aktif olacak.')}
+            >
+              Premium'a Geç
+            </Button>
+          </View>
+        </Surface>
 
         {/* General Settings */}
         <Surface style={styles.section} elevation={1}>

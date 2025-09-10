@@ -154,16 +154,14 @@ export default function MedicationsScreen() {
           </TouchableOpacity>
         </View>
         
-        {!profile?.premium_active && (
-          <Surface style={styles.premiumBanner} elevation={1}>
-            <Text style={styles.premiumText}>
-              {medications.length}/3 ilaç
-            </Text>
-            <TouchableOpacity style={styles.premiumButton}>
-              <Text style={styles.premiumButtonText}>Premium'a Geç</Text>
-            </TouchableOpacity>
-          </Surface>
-        )}
+        <Surface style={styles.premiumBanner} elevation={1}>
+          <Text style={styles.premiumText}>
+            {medications.length}/10 ilaç
+          </Text>
+          <TouchableOpacity style={styles.premiumButton}>
+            <Text style={styles.premiumButtonText}>Premium'a Geç</Text>
+          </TouchableOpacity>
+        </Surface>
 
         {showSearch && (
           <Searchbar
