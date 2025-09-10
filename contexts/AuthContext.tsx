@@ -130,10 +130,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               user_id: data.user.id,
               full_name: fullName,
               phone,
-              dob,
-              consent_at: new Date().toISOString(),
-              locale: 'tr',
-              premium_active: false,
+              birth_date: dob,
             },
           ]);
 

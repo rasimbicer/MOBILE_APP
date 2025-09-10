@@ -1,12 +1,13 @@
 export interface UserProfile {
+  id: string;
   user_id: string;
   full_name: string;
-  dob: string;
+  birth_date: string;
   phone: string;
-  consent_at: string;
-  locale: string;
-  premium_active: boolean;
+  address?: string;
+  avatar_url?: string;
   created_at: string;
+  updated_at: string;
 }
 
 export interface MedicationGroup {

@@ -51,9 +51,7 @@ export default function OnboardingScreen() {
       await updateProfile({
         full_name: formData.fullName,
         phone: formData.phone,
-        dob: formData.dob,
-        consent_at: new Date().toISOString(),
-        locale: 'tr',
+        birth_date: formData.dob,
       });
 
     } catch (error: any) {
